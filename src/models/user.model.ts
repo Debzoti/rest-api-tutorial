@@ -42,6 +42,8 @@ const userSchema = new Schema(
 }
 );
 
+//execxute this function before saving the user
+//this function will hash the password before saving it to the database
 userSchema.pre("save", async function (next) {
    
     let user = this as UserDocument;
@@ -54,7 +56,7 @@ userSchema.pre("save", async function (next) {
    return next();
 });
 
-//custom mehiod for comparing password
+//custom method for comparing password
 userSchema.methods.comparePassword = async function (
     candidatePassword: string
   ): Promise<boolean> {
