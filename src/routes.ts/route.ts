@@ -23,8 +23,10 @@ const route = (app: Express) => {
             status: "success"
         });
     });
-   
-    app.post("/api/users",asyncHandler(validate(createUserSchema)), asyncHandler(createUserHandler));
+    
+    app.post("/api/users",
+        asyncHandler(validate(createUserSchema)), 
+        asyncHandler(createUserHandler));
 }
 
 export default route;

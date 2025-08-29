@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { Document, Model, Schema } from "mongoose";
 import config from "config";
-import { time } from "console";
+
 
 //ts defination for userschema
 export interface UserInput {
@@ -17,7 +17,7 @@ export interface UserDocument extends mongoose.Document,UserInput {
 }
 
 //user schema
-const userSchema = new Schema(
+const userSchema = new Schema<UserDocument>(
     
     {
   name: {
@@ -45,15 +45,15 @@ const userSchema = new Schema(
 //execxute this function before saving the user
 //this function will hash the password before saving it to the database
 userSchema.pre("save", async function (next) {
-   
-    let user = this as UserDocument;
-   if (!user.isModified("password")) {
-     return next();
-   }
-   const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
-   const hash = await bcrypt.hashSync(user.password, salt);
-   user.password = hash;
-   return next();
+    
+      let user = this as UserDocument;
+    if (!user.isModified("password")) {
+      return next();
+    }
+    const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
+    const hash = await bcrypt.hashSync(user.password, salt);
+    user.password = hash;
+    return next();
 });
 
 //custom method for comparing password
@@ -63,6 +63,7 @@ userSchema.methods.comparePassword = async function (
     const user = this as UserDocument;
     return bcrypt.compare(candidatePassword, user.password).catch((e: Error) => false);
   };
+
 
 
 

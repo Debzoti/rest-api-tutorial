@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import { UserDocument } from "./user.model";
 
 
 export interface SessionInput {
-  user: mongoose.Schema.Types.ObjectId;
+  user: UserDocument["_id"];
+  // _id: string; //this is not needed because mongoose will create an id for
   valid?: boolean;
-  userAgent?: string; //its type of browser or device
+  userAgent: string; //its type of browser or device
 }
 export interface SessionDocument extends mongoose.Document, SessionInput {
   createdAt: Date;
@@ -29,3 +31,6 @@ const sessionSchema = new mongoose.Schema(
         timestamps: true,
     }
 )
+
+const SessionModel = mongoose.model<SessionDocument>("Session", sessionSchema);
+export default SessionModel;
